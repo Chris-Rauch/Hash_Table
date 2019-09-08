@@ -3,23 +3,25 @@
 #ifndef HASHTABLE
 #define HASHTABLE
 #include <cstdint>
+#include <string>
 #include <cstring>
 #include <iostream>
-#include <bitset> 
-
-const long TABLE_SIZE = 2048;
+#include <bitset>
+#include <vector>
+using namespace std;
+//const long TABLE_SIZE = 2048;
 
 class HashTable {
 
     public:
-        //void insert(T hashKey);
+        void addUser(const string &userName, const string &password);
+        void display();
 
-    
+    private:
         uint64_t hash(const char* message, size_t messageSize); 
         uint64_t mix(uint64_t block, uint64_t initVector);
     private:
-        char* hashTable_[TABLE_SIZE];
-        size_t size_;
+        std::vector<std::vector<string>> database;
 };
 
 
@@ -37,7 +39,7 @@ uint64_t HashTable::mix(uint64_t block, uint64_t initVector) {
  *
  */
 uint64_t HashTable::hash(const char* message, size_t messageSize) {
-    uint64_t initVector = 0xA5A5A5A5;
+    uint64_t initVector = 0xA5A5A5A5A5A5A5A5;
     uint64_t block = 0;
 
     while(messageSize >= 5) /*64-bits*/ {
@@ -57,11 +59,26 @@ uint64_t HashTable::hash(const char* message, size_t messageSize) {
     return initVector;
 }
 
-/*
-void HashTable::insert(T hashKey) {
-    //calc key-value pair... call hashFunc
-    //check for collisions
-    //add to vector
+void HashTable::addUser(const string &userName, const string &password) {
+    uint64_t passHash;
+
+    //hash the password and convert it to a string object
+    const char* cstr = password.c_str();
+    passHash = hash(cstr, sizeof(cstr));
+    string hashString = to_string(passHash);
+
+    //add the username/password-hash pair to the datatbase
+    vector<string> user = {userName, hashString};
+    database.push_back(user);
 }
-*/
+
+void HashTable::display() {
+    for(int x = 0; x < database.size(); ++x) {
+        for(int y = 0; y < database[x].size(); ++y) {
+            cout << database[x][y] << " ";
+        }
+        cout << endl;
+    }
+}
+
 #endif

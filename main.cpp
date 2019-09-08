@@ -1,25 +1,51 @@
 //@main
-//this is a test
 #include "hashTable.h"
+//using namespace std;
+/* Description:
+ * Basic program for saving usernames and passwords using hashing
+ */
+
+void createUser(HashTable &hashTable);
 
 int main() {
-    HashTable testHash;
-    const char* str = "Test String";
-
-    uint64_t hashVal_i = testHash.hash(str, sizeof(str));
+    HashTable hashTable;
+    bool keepLooping = true;
     
-    std::bitset<64> hashVal_b(hashVal_i);
+    while(keepLooping) {
+        cout << "==== MENU ====\n";
+        cout << "1) Create Username Password Pair\n";
+        cout << "2) Exit\n";
 
-    std::cout << hashVal_b << std::endl;
-    const char* otherStr = "test String";
-
-    uint64_t intHashVal = testHash.hash(otherStr, sizeof(otherStr));
-    
-    std::bitset<64> bitHashVal(intHashVal);
-
-    std::cout << bitHashVal << std::endl;
-
-    
+        short input;
+        cin >> input;
+        switch (input) {
+            case 1:
+                createUser(hashTable);
+                break;
+                
+            case 2:
+                cout << "Exiting Program...\n";
+                keepLooping = false;
+                break;
+                
+            default:
+                cout << "invalid Option\n";
+                break;
+        }
+    }
+    hashTable.display();
 
     return 1;
+}
+
+void createUser(HashTable &hashTable) {
+    string userName;
+    string password;
+    
+    cout << "\nEnter New Username: ";
+    cin >> userName;
+    cout << "Enter New Password: ";
+    cin >> password;
+
+    hashTable.addUser(userName, password);
 }
