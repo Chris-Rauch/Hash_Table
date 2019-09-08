@@ -4,6 +4,8 @@
 #define HASHTABLE
 #include <cstdint>
 #include <cstring>
+#include <iostream>
+#include <bitset> 
 
 const long TABLE_SIZE = 2048;
 
@@ -12,7 +14,7 @@ class HashTable {
     public:
         //void insert(T hashKey);
 
-    private:
+    
         uint64_t hash(const char* message, size_t messageSize); 
         uint64_t mix(uint64_t block, uint64_t initVector);
     private:
