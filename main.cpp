@@ -1,7 +1,9 @@
 //@main
+//this is a test
 #include "hashTable.h"
 
 int main() {
+    std::cout << "hello\n";
     HashTable testHash;
     const char* str = "Test String";
 
