@@ -1,4 +1,5 @@
 //@main
+//this is a test
 #include "hashTable.h"
 
 int main() {
