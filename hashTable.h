@@ -6,24 +6,24 @@
 #include <cstring>
 #include <iostream>
 #include <bitset> 
-
+#include <cmath>
+using namespace std;
 const long TABLE_SIZE = 2048;
+const int KEY_SIZE = 64;
+
 
 class HashTable {
 
     public:
-        //void insert(T hashKey);
-
-    
-        uint64_t hash(const char* message, size_t messageSize); 
-        uint64_t mix(uint64_t block, uint64_t initVector);
+        bitset<KEY_SIZE> hash(const char* message, size_t messageSize); 
+        uint64_t mix(bitset<KEY_SIZE> block, bitset<KEY_SIZE> initVector);
     private:
         char* hashTable_[TABLE_SIZE];
         size_t size_;
 };
 
 
-uint64_t HashTable::mix(uint64_t block, uint64_t initVector) {
+uint64_t HashTable::mix(bitset<KEY_SIZE> block, bitset<KEY_SIZE> initVector) {
     return (initVector * block) ^ ((initVector << 3) + (block >> 2));
 }
 
@@ -36,11 +36,15 @@ uint64_t HashTable::mix(uint64_t block, uint64_t initVector) {
  * 6. Finalize the internal state and return the hash value
  *
  */
-uint64_t HashTable::hash(const char* message, size_t messageSize) {
-    uint64_t initVector = 0xA5A5A5A5;
-    uint64_t block = 0;
-
-    while(messageSize >= 5) /*64-bits*/ {
+bitset<KEY_SIZE> HashTable::hash(const char* message, size_t messageSize) {
+    //uint64_t initVector = 0xA5A5A5A5;
+    //uint64_t block = 0;
+    bitset<KEY_SIZE> initVector(0xA5A5A5A5);
+    bitset<KEY_SIZE> block(0);
+    
+    //log(64) / log(2) = 5
+    //5 for 64 bits because sizeof includes null
+    while(messageSize >= ((log(KEY_SIZE) / log(2)) - 1)) {
         memcpy(&block, message, sizeof(uint64_t));
         initVector = mix(block, initVector);
 
